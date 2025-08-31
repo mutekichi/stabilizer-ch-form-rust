@@ -1,5 +1,5 @@
 /// Represents the phase factor of a stabilizer generator.
-use std::ops::Mul;
+use std::ops::{Mul, MulAssign};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 
@@ -28,6 +28,12 @@ impl Mul for PhaseFactor {
             (MinusI, MinusOne) => PlusI,
             (MinusI, MinusI) => MinusOne,
         }
+    }
+}
+
+impl MulAssign for PhaseFactor {
+    fn mul_assign(&mut self, rhs: Self) {
+        *self = *self * rhs;
     }
 }
 
