@@ -30,3 +30,23 @@ impl Mul for PhaseFactor {
         }
     }
 }
+
+impl PhaseFactor {
+    pub fn to_complex(&self) -> num_complex::Complex64 {
+        match self {
+            PhaseFactor::PlusOne => num_complex::Complex64::new(1.0, 0.0),
+            PhaseFactor::PlusI => num_complex::Complex64::new(0.0, 1.0),
+            PhaseFactor::MinusOne => num_complex::Complex64::new(-1.0, 0.0),
+            PhaseFactor::MinusI => num_complex::Complex64::new(0.0, -1.0),
+        }
+    }
+
+    pub fn flip_sign(&self) -> Self {
+        match self {
+            PhaseFactor::PlusOne => PhaseFactor::MinusOne,
+            PhaseFactor::PlusI => PhaseFactor::MinusI,
+            PhaseFactor::MinusOne => PhaseFactor::PlusOne,
+            PhaseFactor::MinusI => PhaseFactor::PlusI,
+        }
+    }
+}
