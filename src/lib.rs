@@ -3,8 +3,12 @@ use num_complex::Complex64;
 
 pub mod phase_factor;
 pub mod gate_api;
+pub mod inner_product;
+pub mod amplitude;
 
 use phase_factor::PhaseFactor;
+
+#[derive(Debug, Clone)]
 pub struct StabilizerCHForm {
     pub n: usize,
     pub mat_g: Array2<bool>,
