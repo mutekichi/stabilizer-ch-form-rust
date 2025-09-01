@@ -41,4 +41,19 @@ impl StabilizerCHForm {
             phase_factor: PhaseFactor::PlusOne,
         }
     }
+
+    pub fn n_qubits(&self) -> usize {
+        self.n
+    }
+
+    pub fn set_global_phase(&mut self, phase: Complex64) {
+        if (phase.norm_sqr() - 1.0).abs() > 1e-8 {
+            panic!("Global phase must be a unit complex number.");
+        }
+        self.omega = phase;
+    }
+
+    pub fn global_phase(&self) -> Complex64 {
+        self.omega
+    }
 }

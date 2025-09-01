@@ -1,5 +1,4 @@
 use crate::StabilizerCHForm;
-use ndarray::Array1;
 
 pub trait XGate {
     fn apply_x(&mut self, qarg: usize);
