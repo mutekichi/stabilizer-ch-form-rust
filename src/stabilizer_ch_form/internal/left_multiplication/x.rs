@@ -11,8 +11,7 @@ impl StabilizerCHForm {
     /// Time complexity: O(n)
     /// 
     /// See around eq.(48) of arXiv:1808.00128 for details.
-    pub fn apply_x(&mut self, qarg: usize) {
-        
+    pub(crate) fn _apply_x(&mut self, qarg: usize) {
         if qarg >= self.n {
             panic!("Qubit index out of bounds.");
         }

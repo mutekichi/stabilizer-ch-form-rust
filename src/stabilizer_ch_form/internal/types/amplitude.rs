@@ -1,6 +1,6 @@
 use num_complex::Complex64;
 
-use crate::phase_factor::PhaseFactor;
+use crate::stabilizer_ch_form::internal::types::PhaseFactor;
 // Represents i^p 2^{-r/2} where p in {0,1,2,3} and r >= 0
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Amplitude {
