@@ -37,6 +37,8 @@ impl StabilizerCHForm {
             self.phase_factor = self.phase_factor.flip_sign();
         }
 
+        self.phase_factor *= self.gamma[qarg];
+
         self.vec_s = u;
     }
 
@@ -69,4 +71,26 @@ impl StabilizerCHForm {
         self.apply_s(qarg);
     }
 
+}
+
+// Tests
+#[cfg(test)]
+mod tests {
+    // use num_complex::Complex64;
+
+    use super::*;
+
+    #[test]
+    fn test_apply_gates() {
+        // SX|0> = i|1>
+        let mut ch_form = StabilizerCHForm::new(1);
+        ch_form.apply_x(0);
+        let statevector = ch_form.to_statevector();
+        // show
+        dbg!("{:?}", statevector);
+        ch_form.apply_s(0);
+        let statevector = ch_form.to_statevector();
+        dbg!("{:?}", statevector);
+        dbg!("{:?}", ch_form.phase_factor);
+    }
 }

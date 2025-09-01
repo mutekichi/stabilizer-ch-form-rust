@@ -1,5 +1,6 @@
 use super::StabilizerCHForm;
 use crate::amplitude::Amplitude;
+use num_complex::Complex64;
 
 impl StabilizerCHForm {
     /// Computes the amplitude <0...0|φ> for the stabilizer state φ.
@@ -36,5 +37,20 @@ impl StabilizerCHForm {
         }
 
         ch_form_clone.amplitude_at_zero()
+    }
+
+    /// Represents this state as a statevector.
+    /// 
+    /// NOTE: This implementation iterates over all 2^n basis states. This functionality is mainly for testing and debugging purposes.
+    pub fn to_statevector(&self) -> ndarray::Array1<Complex64> {
+        let dim = 1 << self.n; // 2^n
+        let mut statevector = ndarray::Array1::from_elem(dim, Complex64::new(0.0, 0.0));
+
+        for i in 0..dim {
+            let bitstring: ndarray::Array1<bool> = (0..self.n).map(|j| (i & (1 << j)) != 0).collect();
+            statevector[i] = self.amplitude_at_computational_basis(&bitstring).to_complex() * self.omega;
+        }
+
+        statevector
     }
 }

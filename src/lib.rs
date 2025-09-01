@@ -3,8 +3,9 @@ use num_complex::Complex64;
 
 pub mod phase_factor;
 pub mod gate_api;
-pub mod inner_product;
+pub mod statevector;
 pub mod amplitude;
+pub mod utils;
 
 use phase_factor::PhaseFactor;
 

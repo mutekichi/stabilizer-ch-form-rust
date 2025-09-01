@@ -2,7 +2,6 @@
 use std::ops::{Mul, MulAssign};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-
 #[repr(u8)]
 pub enum PhaseFactor {
     PlusOne,
