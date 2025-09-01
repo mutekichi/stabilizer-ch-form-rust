@@ -2,7 +2,7 @@ use ndarray::{Array1, Array2};
 use num_complex::Complex64;
 
 pub mod phase_factor;
-pub mod gate_api;
+pub mod gates;
 pub mod statevector;
 pub mod amplitude;
 pub mod utils;
