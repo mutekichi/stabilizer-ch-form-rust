@@ -1,10 +1,6 @@
 use crate::StabilizerCHForm;
 use ndarray::Array1;
 
-pub trait XGate {
-    fn apply_x(&mut self, qarg: usize);
-}
-
 impl StabilizerCHForm {
     /// Applies the Pauli-X gate to the qubit at index `qarg`.
     /// 

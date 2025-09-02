@@ -10,4 +10,4 @@ pub use cz::CZGate;
 pub use s::SGate;
 pub use x::XGate;
 pub use z::ZGate;
-// pub use h::HGate;
+pub use h::HGate;
