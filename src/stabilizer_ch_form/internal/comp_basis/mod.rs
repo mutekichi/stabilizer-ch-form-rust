@@ -3,7 +3,7 @@ use crate::stabilizer_ch_form::internal::types::Amplitude;
 
 impl StabilizerCHForm {
     /// Computes the amplitude <0...0|φ> for the stabilizer state φ.
-    /// 
+    ///
     /// NOTE: The amplitude includes the phase factor, but not ω.
     /// See around eq.(55) of arXiv:1808.00128 for details.
     pub(crate) fn _amplitude_at_zero(&self) -> Amplitude {
@@ -20,16 +20,15 @@ impl StabilizerCHForm {
         }
     }
 
-    
     /// Computes the amplitude <s|φ> for the stabilizer state φ and bitstring state s.
-    /// 
+    ///
     /// NOTE: This implementation might be inefficient.
     pub(crate) fn _amplitude_at_computational_basis(&self, s: &ndarray::Array1<bool>) -> Amplitude {
         if s.len() != self.n_qubits() {
             panic!("Input bitstring length does not match number of qubits.");
         }
 
-        let mut ch_form_clone= self.clone();
+        let mut ch_form_clone = self.clone();
         for (i, &bit) in s.iter().enumerate() {
             if bit {
                 ch_form_clone._apply_x(i);

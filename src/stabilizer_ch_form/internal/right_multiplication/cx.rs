@@ -5,7 +5,9 @@ impl StabilizerCHForm {
         if control >= self.n || target >= self.n {
             panic!("Qubit index out of bounds.");
         }
-        if control == target { return; }
+        if control == target {
+            return;
+        }
 
         let g_target_col = self.mat_g.column(target).to_owned();
         let mut g_control_col = self.mat_g.column_mut(control);

@@ -2,9 +2,9 @@ use crate::StabilizerCHForm;
 
 impl StabilizerCHForm {
     /// Applies the Hadamard gate to the qubit at index `qarg`.
-    /// 
+    ///
     /// Time complexity: O(n^2)
-    /// 
+    ///
     /// See around Proposition 4. of arXiv:1808.00128 for details.
     pub fn _left_multiply_h(&mut self, qarg: usize) {
         if qarg >= self.n {
@@ -28,15 +28,22 @@ impl StabilizerCHForm {
             .fold(false, |acc, ((&g, &nv), &s)| acc ^ (g && nv && s));
         // beta
         let beta = {
-            let term1_is_odd = m_row.iter().zip(&not_vec_v).zip(&self.vec_s)
+            let term1_is_odd = m_row
+                .iter()
+                .zip(&not_vec_v)
+                .zip(&self.vec_s)
                 .fold(false, |acc, ((&m, &nv), &s)| acc ^ (m && nv && s));
-            let term2_is_odd = f_row.iter().zip(&self.vec_v).zip(m_row)
+            let term2_is_odd = f_row
+                .iter()
+                .zip(&self.vec_v)
+                .zip(m_row)
                 .fold(false, |acc, ((&f, &v), &m)| acc ^ (f && v && m));
-            let term3_is_odd = f_row.iter().zip(&self.vec_v).zip(&self.vec_s)
+            let term3_is_odd = f_row
+                .iter()
+                .zip(&self.vec_v)
+                .zip(&self.vec_s)
                 .fold(false, |acc, ((&f, &v), &s)| acc ^ (f && v && s));
             term1_is_odd ^ term2_is_odd ^ term3_is_odd
         };
-
-
     }
 }

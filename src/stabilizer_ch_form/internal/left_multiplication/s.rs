@@ -1,4 +1,4 @@
-use crate::stabilizer_ch_form::{internal::types::PhaseFactor, StabilizerCHForm};
+use crate::stabilizer_ch_form::{StabilizerCHForm, internal::types::PhaseFactor};
 
 impl StabilizerCHForm {
     pub(crate) fn _left_multiply_s(&mut self, qarg: usize) {

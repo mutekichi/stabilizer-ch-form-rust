@@ -1,16 +1,19 @@
-use crate::stabilizer_ch_form::{StabilizerCHForm, PhaseFactor};
+use crate::stabilizer_ch_form::{PhaseFactor, StabilizerCHForm};
 
 impl StabilizerCHForm {
     pub(crate) fn _left_multiply_cx(&mut self, control: usize, target: usize) {
         if control >= self.n || target >= self.n {
             panic!("Qubit index out of bounds.");
         }
-        if control == target { return; }
+        if control == target {
+            return;
+        }
 
         // 1. Update gamma (must be done before matrix updates)
         let m_control_row = self.mat_m.row(control);
         let f_target_row = self.mat_f.row(target);
-        let dot_product_is_one = m_control_row.iter()
+        let dot_product_is_one = m_control_row
+            .iter()
             .zip(f_target_row.iter())
             .fold(false, |acc, (&m, &f)| acc ^ (m & f));
 
@@ -23,7 +26,7 @@ impl StabilizerCHForm {
             let gamma_t = self.gamma[target];
             self.gamma[control] = gamma_c * gamma_t;
         }
-        
+
         // 2. Update matrices
         let g_control_row = self.mat_g.row(control).to_owned();
         let mut g_target_row = self.mat_g.row_mut(target);
