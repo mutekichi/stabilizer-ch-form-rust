@@ -6,7 +6,7 @@ impl StabilizerCHForm {
         &mut self,
         vec_t: &ndarray::Array1<bool>,
         vec_u: &ndarray::Array1<bool>,
-        mut delta: PhaseFactor,
+        delta: PhaseFactor,
     ) {
         if vec_t == vec_u {
             self._handle_same_vecs_case(delta, vec_t);
@@ -15,49 +15,101 @@ impl StabilizerCHForm {
         let (diff_indices_0, diff_indices_1) = self._get_differing_indices(vec_t, vec_u);
         let pivot = self._apply_basis_transform_circuit(&diff_indices_0, &diff_indices_1);
         // if t_q == 1, (y_q, z_q) = (1,0)
-        // make sure y_q == 0 by:
-        // |1> + i^delta |0> = i^delta (|0> + i^{-delta} |1>)
+        // if t_q == 0, (y_q, z_q) = (0,1)
         if vec_t[pivot] {
-            self.phase_factor *= delta;
-            if delta == PhaseFactor::PlusI || delta == PhaseFactor::MinusI {
-                delta.flip_sign();
-            }
-        }
-        match delta {
-            PhaseFactor::PlusOne => {
-                self.vec_s[pivot] = false;
-                self.vec_v[pivot] = !self.vec_v[pivot];
-            }
-            PhaseFactor::MinusOne => {
-                self.vec_s[pivot] = true;
-                self.vec_v[pivot] = !self.vec_v[pivot];
-            }
-            PhaseFactor::PlusI => {
-                if self.vec_v[pivot] {
-                    // rotate 45 deg
-                    self.set_global_phase(
-                        self.global_phase()
-                            * num_complex::Complex64::new(1.0 / 2f64.sqrt(), 1.0 / 2f64.sqrt()),
-                    );
-                    self.vec_s[pivot] = true;
-                    self._right_multiply_s(pivot);
-                } else {
+            self.vec_s = vec_u.clone();
+
+            match delta {
+                PhaseFactor::PlusOne => {
+                    // H(|1> + |0>) = |0>
+                    // |1> + |0> = H|0>
                     self.vec_s[pivot] = false;
-                    self.vec_v[pivot] = true;
+                    self.vec_v[pivot] = !self.vec_v[pivot];
+                }
+                PhaseFactor::MinusOne => {
+                    // H(|1> - |0>) = -|1>
+                    // |1> - |0> = -H|1>
+                    self.vec_s[pivot] = true;
+                    self.vec_v[pivot] = !self.vec_v[pivot];
+                    self.phase_factor.flip_sign();
+                }
+                PhaseFactor::PlusI => {
+                    if self.vec_v[pivot] {
+                        // H(|1> + i|0>) = e^{iπ/4}SH|0>
+                        // rotate 45 deg
+                        self.set_global_phase(self.global_phase() * num_complex::Complex64::new(1.0 / 2f64.sqrt(), 1.0 / 2f64.sqrt()));
+                        self.vec_s[pivot] = false;
+                        self._right_multiply_s(pivot);
+                    }
+                    else {
+                        // |1> + i|0> = iSH|1>
+                        self.vec_s[pivot] = true;
+                        self.vec_v[pivot] = true;
+                        self._right_multiply_s(pivot);
+                        self.phase_factor *= PhaseFactor::PlusI;
+                    }
+                }
+                PhaseFactor::MinusI => {
+                    if self.vec_v[pivot] {
+                        // H(|1> - i|0>) = e^{-iπ/4}SH|1>
+                        // rotate -45 deg
+                        self.set_global_phase(self.global_phase() * num_complex::Complex64::new(1.0 / 2f64.sqrt(), -1.0 / 2f64.sqrt()));
+                        self.vec_s[pivot] = true;
+                        self._right_multiply_s(pivot);
+                    }
+                    else {
+                        // |1> - i|0> = -iSH|0>
+                        self.vec_s[pivot] = false;
+                        self.vec_v[pivot] = true;
+                        self._right_multiply_s(pivot);
+                        self.phase_factor *= PhaseFactor::MinusI;
+                    }
                 }
             }
-            PhaseFactor::MinusI => {
-                if self.vec_v[pivot] {
-                    // rotate -45 deg
-                    self.set_global_phase(
-                        self.global_phase()
-                            * num_complex::Complex64::new(1.0 / 2f64.sqrt(), -1.0 / 2f64.sqrt()),
-                    );
+        }
+        else {
+            self.vec_s = vec_t.clone();
+
+            match delta {
+                PhaseFactor::PlusOne => {
                     self.vec_s[pivot] = false;
-                    self._right_multiply_s(pivot);
-                } else {
+                    self.vec_v[pivot] = !self.vec_v[pivot];
+                }
+                PhaseFactor::MinusOne => {
                     self.vec_s[pivot] = true;
-                    self.vec_v[pivot] = true;
+                    self.vec_v[pivot] = !self.vec_v[pivot];
+                }
+                PhaseFactor::PlusI => {
+                    if self.vec_v[pivot] {
+                        // H(|0> + i|1>) = e^{iπ/4}SH|1>
+                        // rotate 45 deg
+                        self.set_global_phase(
+                            self.global_phase()
+                                * num_complex::Complex64::new(1.0 / 2f64.sqrt(), 1.0 / 2f64.sqrt()),
+                        );
+                        self.vec_s[pivot] = true;
+                        self._right_multiply_s(pivot);
+                    } else {
+                        // |0> + i|1> = SH|0>
+                        self.vec_s[pivot] = false;
+                        self.vec_v[pivot] = true;
+                        self._right_multiply_s(pivot);
+                    }
+                }
+                PhaseFactor::MinusI => {
+                    if self.vec_v[pivot] {
+                        // rotate -45 deg
+                        self.set_global_phase(
+                            self.global_phase()
+                                * num_complex::Complex64::new(1.0 / 2f64.sqrt(), -1.0 / 2f64.sqrt()),
+                        );
+                        self.vec_s[pivot] = false;
+                        self._right_multiply_s(pivot);
+                    } else {
+                        self.vec_s[pivot] = true;
+                        self.vec_v[pivot] = true;
+                        self._right_multiply_s(pivot);
+                    }
                 }
             }
         }

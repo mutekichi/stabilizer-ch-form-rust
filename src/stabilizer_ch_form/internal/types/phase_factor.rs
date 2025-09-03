@@ -58,4 +58,13 @@ impl PhaseFactor {
     pub fn flip_sign(&mut self) {
         *self = self.flipped();
     }
+
+    pub fn to_int(&self) -> u8 {
+        match self {
+            PhaseFactor::PlusOne => 0,
+            PhaseFactor::PlusI => 1,
+            PhaseFactor::MinusOne => 2,
+            PhaseFactor::MinusI => 3,
+        }
+    }
 }

@@ -40,9 +40,12 @@ impl StabilizerCHForm {
 
         // eq. (49) of arXiv:1808.00128
         // alpha
-        let alpha = (g_row.iter().zip(&self.vec_v).zip(&self.vec_s))
+        let alpha = g_row
+            .iter()
+            .zip(&self.vec_v)
+            .zip(&self.vec_s)
             .filter(|&((&g, &v), &s)| g && !v && s)
-            .fold(false, |acc, ((&g, &nv), &s)| acc ^ (g && nv && s));
+            .count() % 2 != 0;
         // beta
         let beta = {
             let term1_is_odd = m_row

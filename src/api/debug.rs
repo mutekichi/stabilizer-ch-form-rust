@@ -6,6 +6,7 @@
 
 use ndarray::{Array1, Array2};
 use crate::stabilizer_ch_form::StabilizerCHForm;
+use num_complex::Complex64;
 
 /// A snapshot of the internal boolean matrices and vectors of a `StabilizerCHForm`.
 ///
@@ -17,8 +18,10 @@ pub struct CHFormInternalState {
     pub mat_g: Array2<bool>,
     pub mat_f: Array2<bool>,
     pub mat_m: Array2<bool>,
+    pub gamma: Array1<u8>,
     pub vec_v: Array1<bool>,
     pub vec_s: Array1<bool>,
+    pub statevector: Array1<Complex64>, // Optional: for future use
 }
 
 impl CHFormInternalState {
@@ -39,12 +42,25 @@ impl CHFormInternalState {
             let s: String = vec.iter().map(|&b| if b { '1' } else { '0' }).collect();
             println!("{}: [{}]", name, s);
         };
+
+        let print_int_vec = |name: &str, vec: &Array1<u8>| {
+            let s: String = vec.iter().map(|&v| v.to_string()).collect::<Vec<_>>().join(" ");
+            println!("{}: [{}]", name, s);
+        };
         
         print_mat("mat_g", &self.mat_g);
         print_mat("mat_f", &self.mat_f);
         print_mat("mat_m", &self.mat_m);
+        print_int_vec("gamma", &self.gamma);
         print_vec("vec_v", &self.vec_v);
         print_vec("vec_s", &self.vec_s);
+        println!("statevector: [");
+        for (i, amp) in self.statevector.iter().enumerate() {
+            // e.g., |001>: +0.000000 -0.707107i
+            println!("  |{:0width$b}>: {:+.6} {:+.6} i", i, amp.re, amp.im, width = self.n_qubits);
+        }
+        println!("]");
+
         println!("------------------------------------");
     }
 }
@@ -62,8 +78,10 @@ impl Inspectable for StabilizerCHForm {
             mat_g: self.mat_g.clone(),
             mat_f: self.mat_f.clone(),
             mat_m: self.mat_m.clone(),
+            gamma: self.gamma.mapv(|p| p.to_int()),
             vec_v: self.vec_v.clone(),
             vec_s: self.vec_s.clone(),
+            statevector: self.to_statevector()
         }
     }
 }
