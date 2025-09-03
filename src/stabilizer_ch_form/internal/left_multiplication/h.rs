@@ -13,9 +13,9 @@ impl StabilizerCHForm {
         }
         let (vec_t, vec_u, alpha, beta) = self._prepare_h_superposition_args(qarg);
         let delta = if alpha ^ beta {
-            self.gamma[qarg]
-        } else {
             self.gamma[qarg].flipped()
+        } else {
+            self.gamma[qarg]
         };
         if alpha {
             self.phase_factor.flip_sign();
