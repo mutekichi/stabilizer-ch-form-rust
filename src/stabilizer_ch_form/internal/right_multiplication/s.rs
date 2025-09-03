@@ -12,7 +12,7 @@ impl StabilizerCHForm {
 
         for p in 0..self.n {
             if f_col[p] {
-                self.gamma[p] *= PhaseFactor::MinusI;
+                self.gamma[p] *= PhaseFactor::MINUS_I;
             }
         }
     }

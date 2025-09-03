@@ -9,7 +9,7 @@ impl StabilizerCHForm {
         let g_row = self.mat_g.row(qarg).to_owned();
         let mut m_row = self.mat_m.row_mut(qarg);
         m_row ^= &g_row;
-        self.gamma[qarg] *= PhaseFactor::MinusI;
+        self.gamma[qarg] *= PhaseFactor::MINUS_I;
     }
 
     pub(crate) fn _left_multiply_sdg(&mut self, qarg: usize) {
@@ -19,6 +19,6 @@ impl StabilizerCHForm {
         let g_row = self.mat_g.row(qarg).to_owned();
         let mut m_row = self.mat_m.row_mut(qarg);
         m_row ^= &g_row;
-        self.gamma[qarg] *= PhaseFactor::PlusI;
+        self.gamma[qarg] *= PhaseFactor::PLUS_I;
     }
 }

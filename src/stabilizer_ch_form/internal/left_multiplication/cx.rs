@@ -20,7 +20,7 @@ impl StabilizerCHForm {
         if dot_product_is_one {
             let gamma_c = self.gamma[control];
             let gamma_t = self.gamma[target];
-            self.gamma[control] = gamma_c * gamma_t * PhaseFactor::MinusOne;
+            self.gamma[control] = gamma_c * gamma_t * PhaseFactor::MINUS_ONE;
         } else {
             let gamma_c = self.gamma[control];
             let gamma_t = self.gamma[target];

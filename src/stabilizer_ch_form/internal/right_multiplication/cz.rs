@@ -20,7 +20,7 @@ impl StabilizerCHForm {
 
         for p in 0..self.n {
             if f1_col[p] && f2_col[p] {
-                self.gamma[p] *= PhaseFactor::MinusOne; // *(-1) is same as +2 mod 4
+                self.gamma[p] *= PhaseFactor::MINUS_ONE;
             }
         }
     }

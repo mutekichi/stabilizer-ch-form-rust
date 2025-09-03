@@ -20,27 +20,23 @@ impl StabilizerCHForm {
             self.vec_s = vec_u.clone();
 
             match delta {
-                PhaseFactor::PlusOne => {
+                PhaseFactor::PLUS_ONE => {
                     // H(|1> + |0>) = |0>
                     // |1> + |0> = H|0>
                     self.vec_s[pivot] = false;
                     self.vec_v[pivot] = !self.vec_v[pivot];
                 }
-                PhaseFactor::MinusOne => {
+                PhaseFactor::MINUS_ONE => {
                     // H(|1> - |0>) = -|1>
                     // |1> - |0> = -H|1>
                     self.vec_s[pivot] = true;
                     self.vec_v[pivot] = !self.vec_v[pivot];
                     self.phase_factor.flip_sign();
                 }
-                PhaseFactor::PlusI => {
+                PhaseFactor::PLUS_I => {
                     if self.vec_v[pivot] {
                         // H(|1> + i|0>) = e^{iπ/4}SH|0>
-                        // rotate 45 deg
-                        self.set_global_phase(
-                            self.global_phase()
-                                * num_complex::Complex64::new(1.0 / 2f64.sqrt(), 1.0 / 2f64.sqrt()),
-                        );
+                        self.phase_factor *= PhaseFactor::EXP_I_PI_4;
                         self.vec_s[pivot] = false;
                         self._right_multiply_s(pivot);
                     } else {
@@ -48,20 +44,13 @@ impl StabilizerCHForm {
                         self.vec_s[pivot] = true;
                         self.vec_v[pivot] = true;
                         self._right_multiply_s(pivot);
-                        self.phase_factor *= PhaseFactor::PlusI;
+                        self.phase_factor *= PhaseFactor::PLUS_I;
                     }
                 }
-                PhaseFactor::MinusI => {
+                PhaseFactor::MINUS_I => {
                     if self.vec_v[pivot] {
                         // H(|1> - i|0>) = e^{-iπ/4}SH|1>
-                        // rotate -45 deg
-                        self.set_global_phase(
-                            self.global_phase()
-                                * num_complex::Complex64::new(
-                                    1.0 / 2f64.sqrt(),
-                                    -1.0 / 2f64.sqrt(),
-                                ),
-                        );
+                        self.phase_factor *= PhaseFactor::EXP_I_7PI_4;
                         self.vec_s[pivot] = true;
                         self._right_multiply_s(pivot);
                     } else {
@@ -69,30 +58,31 @@ impl StabilizerCHForm {
                         self.vec_s[pivot] = false;
                         self.vec_v[pivot] = true;
                         self._right_multiply_s(pivot);
-                        self.phase_factor *= PhaseFactor::MinusI;
+                        self.phase_factor *= PhaseFactor::MINUS_I;
                     }
                 }
+                _ => unreachable!(),
             }
         } else {
             self.vec_s = vec_t.clone();
 
             match delta {
-                PhaseFactor::PlusOne => {
+                PhaseFactor::PLUS_ONE => {
+                    // H(|0> + |1>) = |0>
+                    // |0> + |1> = H|0>
                     self.vec_s[pivot] = false;
                     self.vec_v[pivot] = !self.vec_v[pivot];
                 }
-                PhaseFactor::MinusOne => {
+                PhaseFactor::MINUS_ONE => {
+                    // H(|0> - |1>) = -|1>
+                    // |0> - |1> = -H|1>
                     self.vec_s[pivot] = true;
                     self.vec_v[pivot] = !self.vec_v[pivot];
                 }
-                PhaseFactor::PlusI => {
+                PhaseFactor::PLUS_I => {
                     if self.vec_v[pivot] {
                         // H(|0> + i|1>) = e^{iπ/4}SH|1>
-                        // rotate 45 deg
-                        self.set_global_phase(
-                            self.global_phase()
-                                * num_complex::Complex64::new(1.0 / 2f64.sqrt(), 1.0 / 2f64.sqrt()),
-                        );
+                        self.phase_factor *= PhaseFactor::EXP_I_PI_4;
                         self.vec_s[pivot] = true;
                         self._right_multiply_s(pivot);
                     } else {
@@ -102,52 +92,41 @@ impl StabilizerCHForm {
                         self._right_multiply_s(pivot);
                     }
                 }
-                PhaseFactor::MinusI => {
+                PhaseFactor::MINUS_I => {
                     if self.vec_v[pivot] {
-                        // rotate -45 deg
-                        self.set_global_phase(
-                            self.global_phase()
-                                * num_complex::Complex64::new(
-                                    1.0 / 2f64.sqrt(),
-                                    -1.0 / 2f64.sqrt(),
-                                ),
-                        );
+                        // H(|0> - i|1>) = e^{-iπ/4}SH|0>
+                        self.phase_factor *= PhaseFactor::EXP_I_7PI_4;
                         self.vec_s[pivot] = false;
                         self._right_multiply_s(pivot);
                     } else {
+                        // |0> - i|1> = SH|1>
                         self.vec_s[pivot] = true;
                         self.vec_v[pivot] = true;
                         self._right_multiply_s(pivot);
                     }
                 }
+                _ => unreachable!(),
             }
         }
     }
 
     fn _handle_same_vecs_case(&mut self, delta: PhaseFactor, vec_t: &ndarray::Array1<bool>) {
         match delta {
-            PhaseFactor::PlusOne => {
+            PhaseFactor::PLUS_ONE => {
                 self.vec_s = vec_t.clone();
             }
-            PhaseFactor::MinusOne => {
+            PhaseFactor::MINUS_ONE => {
                 panic!("Inconsistent state: superposition with -1 coefficient.");
             }
-            PhaseFactor::PlusI => {
+            PhaseFactor::PLUS_I => {
                 self.vec_s = vec_t.clone();
-                // rotate 45 deg
-                self.set_global_phase(
-                    self.global_phase()
-                        * num_complex::Complex64::new(1.0 / 2f64.sqrt(), 1.0 / 2f64.sqrt()),
-                );
+                self.phase_factor *= PhaseFactor::EXP_I_PI_4;
             }
-            PhaseFactor::MinusI => {
+            PhaseFactor::MINUS_I => {
                 self.vec_s = vec_t.clone();
-                // rotate -45 deg
-                self.set_global_phase(
-                    self.global_phase()
-                        * num_complex::Complex64::new(1.0 / 2f64.sqrt(), -1.0 / 2f64.sqrt()),
-                );
+                self.phase_factor *= PhaseFactor::EXP_I_7PI_4;
             }
+            _ => unreachable!(),
         }
     }
 

@@ -33,14 +33,14 @@ impl StabilizerCHForm {
             mat_f: Array2::from_shape_fn((n, n), |(i, j)| i == j),
             mat_m: Array2::from_elem((n, n), false),
             // Initialize gamma as [+1, +1, ..., +1]
-            gamma: Array1::from_elem(n, PhaseFactor::PlusOne),
+            gamma: Array1::from_elem(n, PhaseFactor::PLUS_ONE),
             // Initialize v, s as zero vectors
             vec_v: Array1::from_elem(n, false),
             vec_s: Array1::from_elem(n, false),
             // Initialize omega as 1 + 0i
             omega: Complex64::new(1.0, 0.0),
             // Initialize overall phase factor as +1
-            phase_factor: PhaseFactor::PlusOne,
+            phase_factor: PhaseFactor::PLUS_ONE,
         }
     }
 

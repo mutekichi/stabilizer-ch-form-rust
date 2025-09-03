@@ -39,7 +39,7 @@ mod tests {
         ));
 
         let amp2 = Amplitude::NonZero {
-            phase: PhaseFactor::PlusOne,
+            phase: PhaseFactor::PLUS_ONE,
             r: 0,
         };
         assert!(complex_approx_eq(
@@ -48,7 +48,7 @@ mod tests {
         ));
 
         let amp3 = Amplitude::NonZero {
-            phase: PhaseFactor::PlusI,
+            phase: PhaseFactor::PLUS_I,
             r: 1,
         };
         assert!(complex_approx_eq(
@@ -57,7 +57,7 @@ mod tests {
         ));
 
         let amp4 = Amplitude::NonZero {
-            phase: PhaseFactor::MinusOne,
+            phase: PhaseFactor::MINUS_ONE,
             r: 2,
         };
         assert!(complex_approx_eq(
@@ -66,7 +66,7 @@ mod tests {
         ));
 
         let amp5 = Amplitude::NonZero {
-            phase: PhaseFactor::MinusI,
+            phase: PhaseFactor::MINUS_I,
             r: 3,
         };
         assert!(complex_approx_eq(
