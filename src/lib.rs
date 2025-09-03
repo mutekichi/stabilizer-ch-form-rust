@@ -8,8 +8,6 @@ pub mod stabilizer_ch_form;
 
 pub use stabilizer_ch_form::StabilizerCHForm;
 pub mod prelude {
-    pub use crate::api::gates::*;
-    pub use crate::api::representation::*;
-    pub use crate::api::debug::*;
+    pub use crate::api::*;
     pub use crate::stabilizer_ch_form::StabilizerCHForm;
 }

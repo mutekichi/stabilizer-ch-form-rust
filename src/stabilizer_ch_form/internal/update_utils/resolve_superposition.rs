@@ -37,11 +37,13 @@ impl StabilizerCHForm {
                     if self.vec_v[pivot] {
                         // H(|1> + i|0>) = e^{iπ/4}SH|0>
                         // rotate 45 deg
-                        self.set_global_phase(self.global_phase() * num_complex::Complex64::new(1.0 / 2f64.sqrt(), 1.0 / 2f64.sqrt()));
+                        self.set_global_phase(
+                            self.global_phase()
+                                * num_complex::Complex64::new(1.0 / 2f64.sqrt(), 1.0 / 2f64.sqrt()),
+                        );
                         self.vec_s[pivot] = false;
                         self._right_multiply_s(pivot);
-                    }
-                    else {
+                    } else {
                         // |1> + i|0> = iSH|1>
                         self.vec_s[pivot] = true;
                         self.vec_v[pivot] = true;
@@ -53,11 +55,16 @@ impl StabilizerCHForm {
                     if self.vec_v[pivot] {
                         // H(|1> - i|0>) = e^{-iπ/4}SH|1>
                         // rotate -45 deg
-                        self.set_global_phase(self.global_phase() * num_complex::Complex64::new(1.0 / 2f64.sqrt(), -1.0 / 2f64.sqrt()));
+                        self.set_global_phase(
+                            self.global_phase()
+                                * num_complex::Complex64::new(
+                                    1.0 / 2f64.sqrt(),
+                                    -1.0 / 2f64.sqrt(),
+                                ),
+                        );
                         self.vec_s[pivot] = true;
                         self._right_multiply_s(pivot);
-                    }
-                    else {
+                    } else {
                         // |1> - i|0> = -iSH|0>
                         self.vec_s[pivot] = false;
                         self.vec_v[pivot] = true;
@@ -66,8 +73,7 @@ impl StabilizerCHForm {
                     }
                 }
             }
-        }
-        else {
+        } else {
             self.vec_s = vec_t.clone();
 
             match delta {
@@ -101,7 +107,10 @@ impl StabilizerCHForm {
                         // rotate -45 deg
                         self.set_global_phase(
                             self.global_phase()
-                                * num_complex::Complex64::new(1.0 / 2f64.sqrt(), -1.0 / 2f64.sqrt()),
+                                * num_complex::Complex64::new(
+                                    1.0 / 2f64.sqrt(),
+                                    -1.0 / 2f64.sqrt(),
+                                ),
                         );
                         self.vec_s[pivot] = false;
                         self._right_multiply_s(pivot);

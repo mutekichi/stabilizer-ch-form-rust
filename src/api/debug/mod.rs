@@ -4,8 +4,8 @@
 //! These APIs are intended for debugging and testing purposes and may change
 //! without notice in future versions.
 
-use ndarray::{Array1, Array2};
 use crate::stabilizer_ch_form::StabilizerCHForm;
+use ndarray::{Array1, Array2};
 use num_complex::Complex64;
 
 /// A snapshot of the internal boolean matrices and vectors of a `StabilizerCHForm`.
@@ -44,10 +44,14 @@ impl CHFormInternalState {
         };
 
         let print_int_vec = |name: &str, vec: &Array1<u8>| {
-            let s: String = vec.iter().map(|&v| v.to_string()).collect::<Vec<_>>().join(" ");
+            let s: String = vec
+                .iter()
+                .map(|&v| v.to_string())
+                .collect::<Vec<_>>()
+                .join(" ");
             println!("{}: [{}]", name, s);
         };
-        
+
         print_mat("mat_g", &self.mat_g);
         print_mat("mat_f", &self.mat_f);
         print_mat("mat_m", &self.mat_m);
@@ -57,7 +61,13 @@ impl CHFormInternalState {
         println!("statevector: [");
         for (i, amp) in self.statevector.iter().enumerate() {
             // e.g., |001>: +0.000000 -0.707107i
-            println!("  |{:0width$b}>: {:+.6} {:+.6} i", i, amp.re, amp.im, width = self.n_qubits);
+            println!(
+                "  |{:0width$b}>: {:+.6} {:+.6} i",
+                i,
+                amp.re,
+                amp.im,
+                width = self.n_qubits
+            );
         }
         println!("]");
 
@@ -81,7 +91,7 @@ impl Inspectable for StabilizerCHForm {
             gamma: self.gamma.mapv(|p| p.to_int()),
             vec_v: self.vec_v.clone(),
             vec_s: self.vec_s.clone(),
-            statevector: self.to_statevector()
+            statevector: self.to_statevector(),
         }
     }
 }

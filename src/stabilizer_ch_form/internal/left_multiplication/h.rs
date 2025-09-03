@@ -45,7 +45,9 @@ impl StabilizerCHForm {
             .zip(&self.vec_v)
             .zip(&self.vec_s)
             .filter(|&((&g, &v), &s)| g && !v && s)
-            .count() % 2 != 0;
+            .count()
+            % 2
+            != 0;
         // beta
         let beta = {
             let term1_is_odd = m_row

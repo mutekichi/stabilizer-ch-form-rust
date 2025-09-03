@@ -21,7 +21,9 @@ pub fn assert_eq_complex_array1(a: &Array1<Complex64>, b: &Array1<Complex64>) {
 }
 
 #[allow(dead_code)]
-pub fn load_statevector_from_file<P: AsRef<Path>>(path: P) -> Result<Array1<Complex64>, std::io::Error> {
+pub fn load_statevector_from_file<P: AsRef<Path>>(
+    path: P,
+) -> Result<Array1<Complex64>, std::io::Error> {
     let file = File::open(path)?;
     let reader = BufReader::new(file);
     let mut vec_data = Vec::new();
@@ -30,8 +32,14 @@ pub fn load_statevector_from_file<P: AsRef<Path>>(path: P) -> Result<Array1<Comp
         let line_content = line?;
         let parts: Vec<&str> = line_content.split(',').collect();
         if parts.len() == 2 {
-            let real = parts[0].trim().parse::<f64>().expect("Failed to parse real part");
-            let imag = parts[1].trim().parse::<f64>().expect("Failed to parse imag part");
+            let real = parts[0]
+                .trim()
+                .parse::<f64>()
+                .expect("Failed to parse real part");
+            let imag = parts[1]
+                .trim()
+                .parse::<f64>()
+                .expect("Failed to parse imag part");
             vec_data.push(Complex64::new(real, imag));
         }
     }
@@ -41,7 +49,10 @@ pub fn load_statevector_from_file<P: AsRef<Path>>(path: P) -> Result<Array1<Comp
 /// Prints a boolean vector (Array1<bool>) to the console in a readable format (e.g., [0, 1, 0]).
 #[allow(dead_code)]
 pub fn pretty_print_vec(name: &str, vec: &Array1<bool>) {
-    let s: String = vec.iter().map(|&b| if b { '1' } else { '0' }).collect::<String>();
+    let s: String = vec
+        .iter()
+        .map(|&b| if b { '1' } else { '0' })
+        .collect::<String>();
     println!("{}: [{}]", name, s);
 }
 

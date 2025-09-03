@@ -46,7 +46,7 @@ fn test_hadamard_behaviour() {
     ch_form.apply_z(0);
     ch_form.apply_cz(0, 1);
     ch_form.apply_h(0);
-    
+
     let internal_state = ch_form.get_internal_state();
     internal_state.pretty_print();
 }

@@ -1,7 +1,6 @@
 use ndarray::{Array1, Array2};
 use num_complex::Complex64;
 
-
 mod internal;
 use crate::api::QuantumCircuit;
 use crate::api::QuantumGate;
@@ -20,7 +19,6 @@ pub struct StabilizerCHForm {
     pub(crate) omega: Complex64,
     pub(crate) phase_factor: PhaseFactor,
 }
-
 
 impl StabilizerCHForm {
     pub fn new(n: usize) -> Self {
