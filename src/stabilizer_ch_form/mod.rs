@@ -10,16 +10,17 @@ use internal::types::phase_factor::PhaseFactor;
 
 #[derive(Debug, Clone)]
 pub struct StabilizerCHForm {
-    n: usize,
-    mat_g: Array2<bool>,
-    mat_f: Array2<bool>,
-    mat_m: Array2<bool>,
-    gamma: Array1<PhaseFactor>,
-    vec_v: Array1<bool>,
-    vec_s: Array1<bool>,
-    omega: Complex64,
-    phase_factor: PhaseFactor,
+    pub(crate) n: usize,
+    pub(crate) mat_g: Array2<bool>,
+    pub(crate) mat_f: Array2<bool>,
+    pub(crate) mat_m: Array2<bool>,
+    pub(crate) gamma: Array1<PhaseFactor>,
+    pub(crate) vec_v: Array1<bool>,
+    pub(crate) vec_s: Array1<bool>,
+    pub(crate) omega: Complex64,
+    pub(crate) phase_factor: PhaseFactor,
 }
+
 
 impl StabilizerCHForm {
     pub fn new(n: usize) -> Self {
