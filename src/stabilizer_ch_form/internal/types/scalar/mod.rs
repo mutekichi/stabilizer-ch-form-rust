@@ -3,6 +3,7 @@ use num_complex::Complex64;
 
 /// Represents a scalar value in the form `phase * 2^(-r/2)` or zero.
 /// This is used for representing amplitudes and inner products exactly, avoiding floating-point errors.
+/// NOTE: Should be changed to pub(crate)
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Scalar {
     Zero,

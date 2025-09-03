@@ -4,6 +4,8 @@ use std::ops::{Mul, MulAssign};
 /// Represents a phase of the form e^(i * k * pi / 4) for k in {0, 1, ..., 7}.
 ///
 /// Internally, this stores the value of `k`.
+/// 
+/// NOTE: Should be changed to pub(crate)
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct PhaseFactor(u8);
 

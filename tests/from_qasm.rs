@@ -52,9 +52,6 @@ fn compare_with_qiskit_references() {
                     )
                 });
 
-            println!("Our statevector: {:?}", our_statevector);
-            println!("Reference statevector: {:?}", reference_statevector);
-
             common::assert_eq_complex_array1(&our_statevector, &reference_statevector);
 
             println!("--- Test case '{}' passed! ---\n", test_case_name);

@@ -11,6 +11,6 @@ impl XGate for StabilizerCHForm {
     ///
     /// See around eq.(48) of arXiv:1808.00128 for details.
     fn apply_x(&mut self, qarg: usize) {
-        self._apply_x(qarg);
+        self._left_multiply_x(qarg);
     }
 }
