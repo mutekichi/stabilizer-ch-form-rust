@@ -1,4 +1,5 @@
 use crate::StabilizerCHForm;
+use ndarray::Array1;
 
 impl StabilizerCHForm {
     /// Applies the Hadamard gate to the qubit at index `qarg`.
@@ -10,7 +11,23 @@ impl StabilizerCHForm {
         if qarg >= self.n {
             panic!("Qubit index out of bounds.");
         }
+        let (vec_t, vec_u, alpha, beta) = self._prepare_h_superposition_args(qarg);
+        let delta = if alpha ^ beta {
+            self.gamma[qarg]
+        } else {
+            self.gamma[qarg].flipped()
+        };
+        if alpha {
+            self.phase_factor.flip_sign();
+        }
+        self._resolve_superposition(&vec_t, &vec_u, delta);
+    }
 
+    /// Prepares vec_t, vec_u, alpha, beta for applying H to qubit `qarg`.
+    pub fn _prepare_h_superposition_args(
+        &self,
+        qarg: usize,
+    ) -> (Array1<bool>, Array1<bool>, bool, bool) {
         let g_row = self.mat_g.row(qarg);
         let f_row = self.mat_f.row(qarg);
         let m_row = self.mat_m.row(qarg);
@@ -45,5 +62,7 @@ impl StabilizerCHForm {
                 .fold(false, |acc, ((&f, &v), &s)| acc ^ (f && v && s));
             term1_is_odd ^ term2_is_odd ^ term3_is_odd
         };
+
+        (vec_t, vec_u, alpha, beta)
     }
 }

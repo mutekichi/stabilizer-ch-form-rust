@@ -46,12 +46,16 @@ impl PhaseFactor {
         }
     }
 
-    pub fn flip_sign(&self) -> Self {
+    pub fn flipped(&self) -> Self {
         match self {
             PhaseFactor::PlusOne => PhaseFactor::MinusOne,
             PhaseFactor::PlusI => PhaseFactor::MinusI,
             PhaseFactor::MinusOne => PhaseFactor::PlusOne,
             PhaseFactor::MinusI => PhaseFactor::PlusI,
         }
+    }
+
+    pub fn flip_sign(&mut self) {
+        *self = self.flipped();
     }
 }

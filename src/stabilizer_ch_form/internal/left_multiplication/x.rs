@@ -48,7 +48,7 @@ impl StabilizerCHForm {
         let beta = (term1 + term2 + term3) % 2;
 
         if beta == 1 {
-            self.phase_factor = self.phase_factor.flip_sign();
+            self.phase_factor = self.phase_factor.flipped();
         }
 
         self.phase_factor *= self.gamma[qarg];

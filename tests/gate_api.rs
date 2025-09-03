@@ -1,19 +1,34 @@
 use stabilizer_ch_form_rust::StabilizerCHForm;
 use stabilizer_ch_form_rust::prelude::*;
+mod common;
 
 #[test]
-fn test_to_statevector() {
-    let mut state = StabilizerCHForm::new(2);
-    state.apply_h(0);
-    state.apply_cz(0, 1);
-    let statevector = state.to_statevector();
-    let expected = vec![
-        num_complex::Complex64::new(0.7071067811865475, 0.0),
-        num_complex::Complex64::new(0.0, 0.0),
-        num_complex::Complex64::new(0.0, 0.0),
-        num_complex::Complex64::new(0.7071067811865475, 0.0),
+fn test_hadamard() {
+    let mut ch_form = StabilizerCHForm::new(1);
+    ch_form.apply_h(0);
+
+    let statevec = ch_form.to_statevector();
+    println!("Statevector after H: {:?}", statevec);
+    let expected = ndarray::array![
+        num_complex::Complex64::new(1.0 / 2f64.sqrt(), 0.0),
+        num_complex::Complex64::new(1.0 / 2f64.sqrt(), 0.0)
     ];
-    for (a, b) in statevector.iter().zip(expected.iter()) {
-        assert!((a - b).norm() < 1e-10);
-    }
+    common::assert_eq_complex_array1(&statevec, &expected);
+}
+
+#[test]
+fn test_bell_state() {
+    let mut ch_form = StabilizerCHForm::new(2);
+    ch_form.apply_h(0);
+    ch_form.apply_cx(0, 1);
+
+    let statevec = ch_form.to_statevector();
+    // ndarray::array![1.0, 0.0, 0.0, 1.0] / 2f64.sqrt();
+    let expected = ndarray::array![
+        num_complex::Complex64::new(1.0 / 2f64.sqrt(), 0.0),
+        num_complex::Complex64::new(0.0, 0.0),
+        num_complex::Complex64::new(0.0, 0.0),
+        num_complex::Complex64::new(1.0 / 2f64.sqrt(), 0.0)
+    ];
+    common::assert_eq_complex_array1(&statevec, &expected);
 }
