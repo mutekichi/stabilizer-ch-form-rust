@@ -6,6 +6,6 @@ impl StabilizerCHForm {
             // TODO: better error handling
             panic!("Qubit index out of bounds.");
         }
-        self.gamma[qarg].flipped();
+        self.gamma[qarg].flip_sign();
     }
 }

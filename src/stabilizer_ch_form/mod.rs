@@ -1,8 +1,11 @@
 use ndarray::{Array1, Array2};
 use num_complex::Complex64;
 
-mod internal;
 
+mod internal;
+use crate::api::QuantumCircuit;
+use crate::api::QuantumGate;
+use crate::api::gates::*;
 use internal::types::phase_factor::PhaseFactor;
 
 #[derive(Debug, Clone)]
@@ -55,5 +58,24 @@ impl StabilizerCHForm {
 
     pub fn global_phase(&self) -> Complex64 {
         self.omega
+    }
+
+    pub fn try_from(circuit: &QuantumCircuit) -> Result<Self, String> {
+        if circuit.n_qubits == 0 {
+            return Err("Number of qubits must be greater than zero.".to_string());
+        }
+        let mut ch_form = StabilizerCHForm::new(circuit.n_qubits);
+
+        for gate in &circuit.gates {
+            match gate {
+                QuantumGate::H(q) => ch_form.apply_h(*q),
+                QuantumGate::S(q) => ch_form.apply_s(*q),
+                QuantumGate::X(q) => ch_form.apply_x(*q),
+                QuantumGate::Z(q) => ch_form.apply_z(*q),
+                QuantumGate::CX(c, t) => ch_form.apply_cx(*c, *t),
+                QuantumGate::CZ(q1, q2) => ch_form.apply_cz(*q1, *q2),
+            }
+        }
+        Ok(ch_form)
     }
 }

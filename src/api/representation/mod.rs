@@ -27,3 +27,5 @@ impl QuantumCircuit {
         }
     }
 }
+
+pub use qasm_parser::{from_qasm_file, from_qasm_str};
