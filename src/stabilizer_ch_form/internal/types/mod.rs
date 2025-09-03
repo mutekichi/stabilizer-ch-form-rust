@@ -1,5 +1,5 @@
-pub mod amplitude;
+pub mod scalar;
 pub mod phase_factor;
 
-pub use amplitude::Amplitude;
+pub use scalar::Scalar;
 pub use phase_factor::PhaseFactor;

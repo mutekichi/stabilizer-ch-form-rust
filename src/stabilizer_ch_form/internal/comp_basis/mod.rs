@@ -1,20 +1,20 @@
 use crate::StabilizerCHForm;
-use crate::stabilizer_ch_form::internal::types::Amplitude;
+use crate::stabilizer_ch_form::internal::types::Scalar;
 
 impl StabilizerCHForm {
     /// Computes the amplitude <0...0|φ> for the stabilizer state φ.
     ///
     /// NOTE: The amplitude includes the phase factor, but not ω.
     /// See around eq.(55) of arXiv:1808.00128 for details.
-    pub(crate) fn _amplitude_at_zero(&self) -> Amplitude {
+    pub(crate) fn _amplitude_at_zero(&self) -> Scalar {
         for j in 0..self.n {
             if !self.vec_v[j] && self.vec_s[j] {
-                return Amplitude::Zero;
+                return Scalar::Zero;
             }
         }
         let weight_v = self.vec_v.iter().filter(|&&x| x).count();
 
-        Amplitude::NonZero {
+        Scalar::NonZero {
             phase: self.phase_factor,
             r: weight_v,
         }
@@ -23,7 +23,7 @@ impl StabilizerCHForm {
     /// Computes the amplitude <s|φ> for the stabilizer state φ and bitstring state s.
     ///
     /// NOTE: This implementation might be inefficient.
-    pub(crate) fn _amplitude_at_computational_basis(&self, s: &ndarray::Array1<bool>) -> Amplitude {
+    pub(crate) fn _amplitude_at_computational_basis(&self, s: &ndarray::Array1<bool>) -> Scalar {
         if s.len() != self.n_qubits() {
             panic!("Input bitstring length does not match number of qubits.");
         }
