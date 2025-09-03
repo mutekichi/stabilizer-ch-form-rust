@@ -4,19 +4,19 @@ use std::ops::{Mul, MulAssign};
 /// Represents a phase of the form e^(i * k * pi / 4) for k in {0, 1, ..., 7}.
 ///
 /// Internally, this stores the value of `k`.
-/// 
+///
 /// NOTE: Should be changed to pub(crate)
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct PhaseFactor(u8);
 
 impl PhaseFactor {
-    pub const PLUS_ONE: Self = Self(0);   // k=0
+    pub const PLUS_ONE: Self = Self(0); // k=0
     pub const EXP_I_PI_4: Self = Self(1); // k=1
-    pub const PLUS_I: Self = Self(2);     // k=2
+    pub const PLUS_I: Self = Self(2); // k=2
     pub const EXP_I_3PI_4: Self = Self(3); // k=3
-    pub const MINUS_ONE: Self = Self(4);  // k=4
+    pub const MINUS_ONE: Self = Self(4); // k=4
     pub const EXP_I_5PI_4: Self = Self(5); // k=5
-    pub const MINUS_I: Self = Self(6);    // k=6
+    pub const MINUS_I: Self = Self(6); // k=6
     pub const EXP_I_7PI_4: Self = Self(7); // k=7
 
     pub fn new(k: u8) -> Self {
@@ -38,7 +38,7 @@ impl PhaseFactor {
     pub fn conjugate_mut(&mut self) {
         *self = self.conjugated();
     }
-    
+
     /// Multiplies the phase by -1 (adds pi to the angle, which is k=4).
     pub fn flipped(&self) -> Self {
         Self((self.0 + 4) % 8)
