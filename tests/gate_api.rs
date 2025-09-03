@@ -32,3 +32,17 @@ fn test_bell_state() {
     ];
     common::assert_eq_complex_array1(&statevec, &expected);
 }
+
+#[test]
+fn test_hadamard_behaviour() {
+    let mut ch_form = StabilizerCHForm::new(1);
+    ch_form.apply_h(0);
+
+    let statevec = ch_form.to_statevector();
+    println!("Statevector after H: {:?}", statevec);
+    let expected = ndarray::array![
+        num_complex::Complex64::new(1.0 / 2f64.sqrt(), 0.0),
+        num_complex::Complex64::new(1.0 / 2f64.sqrt(), 0.0)
+    ];
+    common::assert_eq_complex_array1(&statevec, &expected);
+}
