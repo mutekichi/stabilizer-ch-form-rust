@@ -7,7 +7,7 @@ impl StabilizerCHForm {
     /// This is an in-place operation that modifies the state.
     /// NOTE: This function assumes that the qubit `qarg` has already been
     /// projected onto the |0> state and is disentangled from the rest.
-    pub fn discard(&mut self, qarg: usize) -> Result<(), &'static str> {
+    pub(crate) fn _discard(&mut self, qarg: usize) -> Result<(), &'static str> {
         if self.n == 0 {
             return Err("Cannot discard a qubit from an empty state.");
         }

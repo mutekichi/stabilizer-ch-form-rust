@@ -1,6 +1,5 @@
 // src/api/operations/kron.rs
 use crate::StabilizerCHForm;
-use ndarray::{Axis, s};
 
 impl StabilizerCHForm {
     /// Computes the tensor product of this state with another.
