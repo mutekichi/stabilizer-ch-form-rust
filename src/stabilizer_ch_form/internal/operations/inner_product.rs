@@ -1,6 +1,6 @@
 use crate::StabilizerCHForm;
+use crate::stabilizer_ch_form::internal::types::InternalGate;
 use crate::stabilizer_ch_form::internal::types::PhaseFactor;
-use crate::stabilizer_ch_form::internal::types::internal_gate::InternalGate;
 
 impl StabilizerCHForm {
     // TODO: Implement batch inner product calculation since the result of
@@ -31,8 +31,8 @@ impl StabilizerCHForm {
         // So res.to_complex() is the part without the original omega.
         let inner_product_val = (res * phase.conjugated()).to_complex();
 
-        // We need to account for the omega of the original |self> state.
-        self.omega.conj() * inner_product_val
+        // We need to account for the global phases
+        self.global_phase() * other.global_phase() * inner_product_val
     }
 
     /// Returns the sequence of operations needed to transform the current state to |0...0>

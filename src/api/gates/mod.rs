@@ -11,3 +11,6 @@ pub use h::HGate;
 pub use s::SGate;
 pub use x::XGate;
 pub use z::ZGate;
+
+// TODO: SdgGate, YGate, SwapGate
+// DIDN'T DO: SqrtXGate, SqrtXdgGate, SqrtYGate, SqrtYdgGate

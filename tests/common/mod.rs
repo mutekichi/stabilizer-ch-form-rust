@@ -7,6 +7,7 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::Path;
 
+#[allow(dead_code)]
 pub fn assert_eq_complex(a: Complex64, b: Complex64) {
     let diff = (a - b).norm();
     assert!(
@@ -19,6 +20,7 @@ pub fn assert_eq_complex(a: Complex64, b: Complex64) {
     );
 }
 
+#[allow(dead_code)]
 pub fn assert_eq_complex_array1(a: &Array1<Complex64>, b: &Array1<Complex64>) {
     assert_eq!(a.len(), b.len(), "Arrays have different lengths.");
     for (i, (x, y)) in a.iter().zip(b.iter()).enumerate() {
