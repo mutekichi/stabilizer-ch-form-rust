@@ -22,6 +22,7 @@ impl StabilizerCHForm {
 
     /// Computes the amplitude <s|φ> for the stabilizer state φ and bitstring state s.
     ///
+    /// NOTE: The amplitude includes the phase factor, but not the global phase ω.
     /// NOTE: This implementation might be inefficient.
     pub(crate) fn _amplitude_at_computational_basis(&self, s: &ndarray::Array1<bool>) -> Scalar {
         if s.len() != self.n_qubits() {

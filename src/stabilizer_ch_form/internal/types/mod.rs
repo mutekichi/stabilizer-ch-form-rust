@@ -1,4 +1,5 @@
 pub mod internal_gate;
+pub mod measurement;
 pub mod phase_factor;
 pub mod scalar;
 

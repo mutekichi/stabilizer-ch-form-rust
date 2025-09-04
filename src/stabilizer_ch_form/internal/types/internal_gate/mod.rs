@@ -4,7 +4,7 @@ use crate::StabilizerCHForm;
 // Should be changed to pub(crate)
 pub enum InternalGate {
     H(usize),
-    S(usize),
+    // S(usize), // Internal S gate is not used
     Sdg(usize),
     X(usize),
     CX(usize, usize),
@@ -17,7 +17,7 @@ impl StabilizerCHForm {
         for op in ops {
             match op {
                 InternalGate::H(q) => new_state._left_multiply_h(*q),
-                InternalGate::S(q) => new_state._left_multiply_s(*q),
+                // InternalGate::S(q) => new_state._left_multiply_s(*q),
                 InternalGate::Sdg(q) => new_state._left_multiply_sdg(*q),
                 InternalGate::X(q) => new_state._left_multiply_x(*q),
                 InternalGate::CX(c, t) => new_state._left_multiply_cx(*c, *t),
