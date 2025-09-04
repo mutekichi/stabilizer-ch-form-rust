@@ -15,7 +15,8 @@ impl StabilizerCHForm {
             QubitState::Superposition => {
                 // Randomly collapse the qubit to |0> or |1>
                 let outcome = random::<bool>();
-                self._collapse_to_z_basis_state(qarg, outcome);
+                self._project(qarg, outcome)
+                    .expect("Projection failed during measurement.");
                 outcome
             }
         }

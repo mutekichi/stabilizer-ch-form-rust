@@ -7,7 +7,7 @@ impl StabilizerCHForm {
             panic!("Qubit index out of bounds.");
         }
         if qarg >= self.n_qubits() {
-            panic!("Qubit index out of bounds.");
+            panic!("Qubit index ouWt of bounds.");
         }
 
         let g_row = self.mat_g.row(qarg);
