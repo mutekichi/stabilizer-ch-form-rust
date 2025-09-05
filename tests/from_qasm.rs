@@ -1,5 +1,6 @@
 mod common;
 
+use stabilizer_ch_form_rust::api::parser::from_qasm_file;
 use stabilizer_ch_form_rust::prelude::*;
 use std::fs;
 use std::path::Path;

@@ -6,31 +6,13 @@ pub struct CliffordCircuit {
 }
 
 impl CliffordCircuit {
-    pub fn add_gate(&mut self, gate: CliffordGate) {
-        match &gate {
-            CliffordGate::H(q)
-            | CliffordGate::S(q)
-            | CliffordGate::Sdg(q)
-            | CliffordGate::X(q)
-            | CliffordGate::Y(q)
-            | CliffordGate::Z(q)
-            | CliffordGate::SqrtX(q)
-            | CliffordGate::SqrtXdg(q) => {
-                if *q >= self.n_qubits {
-                    panic!("Qubit index out of bounds.");
-                }
-            }
-            CliffordGate::CX(q1, q2)
-            | CliffordGate::CZ(q1, q2)
-            | CliffordGate::Swap(q1, q2) => {
-                if *q1 >= self.n_qubits || *q2 >= self.n_qubits {
-                    panic!("Qubit index out of bounds.");
-                }
-                if q1 == q2 {
-                    panic!("Control and target qubits must be different.");
-                }
-            }
+    pub fn new(n_qubits: usize) -> Self {
+        CliffordCircuit {
+            n_qubits,
+            gates: Vec::new(),
         }
+    }
+    pub fn add_gate(&mut self, gate: CliffordGate) {
         self.gates.push(gate);
     }
 

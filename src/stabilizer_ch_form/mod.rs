@@ -58,7 +58,7 @@ impl StabilizerCHForm {
         self.omega
     }
 
-    pub fn try_from(circuit: &QuantumCircuit) -> Result<Self, String> {
+    pub fn try_from(circuit: &CliffordCircuit) -> Result<Self, String> {
         if circuit.n_qubits == 0 {
             return Err("Number of qubits must be greater than zero.".to_string());
         }
@@ -66,12 +66,23 @@ impl StabilizerCHForm {
 
         for gate in &circuit.gates {
             match gate {
-                QuantumGate::H(q) => ch_form.apply_h(*q),
-                QuantumGate::S(q) => ch_form.apply_s(*q),
-                QuantumGate::X(q) => ch_form.apply_x(*q),
-                QuantumGate::Z(q) => ch_form.apply_z(*q),
-                QuantumGate::CX(c, t) => ch_form.apply_cx(*c, *t),
-                QuantumGate::CZ(q1, q2) => ch_form.apply_cz(*q1, *q2),
+                CliffordGate::H(q) => ch_form._left_multiply_h(*q),
+                CliffordGate::S(q) => ch_form._left_multiply_s(*q),
+                CliffordGate::Sdg(q) => ch_form._left_multiply_sdg(*q),
+                CliffordGate::X(q) => ch_form._left_multiply_x(*q),
+                CliffordGate::Y(q) => ch_form._left_multiply_y(*q),
+                CliffordGate::Z(q) => ch_form._left_multiply_z(*q),
+                CliffordGate::SqrtX(q) => ch_form._left_multiply_sqrt_x(*q),
+                CliffordGate::SqrtXdg(q) => ch_form._left_multiply_sqrt_xdg(*q),
+                CliffordGate::CX(control, target) => {
+                    ch_form._left_multiply_cx(*control, *target)
+                }
+                CliffordGate::CZ(control, target) => {
+                    ch_form._left_multiply_cz(*control, *target)
+                }
+                CliffordGate::Swap(q1, q2) => {
+                    ch_form._left_multiply_swap(*q1, *q2)
+                }
             }
         }
         Ok(ch_form)

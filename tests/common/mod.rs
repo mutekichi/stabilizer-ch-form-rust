@@ -2,7 +2,7 @@ use ndarray::{Array1, Array2};
 use num_complex::Complex64;
 use rand::rngs::StdRng;
 use rand::{Rng, SeedableRng};
-use stabilizer_ch_form_rust::api::{QuantumCircuit, QuantumGate};
+use stabilizer_ch_form_rust::api::{CliffordCircuit, CliffordGate};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::Path;
@@ -86,30 +86,32 @@ pub fn pretty_print_mat(name: &str, mat: &Array2<bool>) {
 
 /// Generates a random quantum circuit with the specified number of qubits and gates.
 #[allow(dead_code)]
-pub fn random_circuit(n_qubits: usize, gate_count: usize, seed: Option<u64>) -> QuantumCircuit {
-    let mut circuit = QuantumCircuit::new(n_qubits);
+pub fn random_circuit(n_qubits: usize, gate_count: usize, seed: Option<u64>) -> CliffordCircuit {
+    let mut circuit = CliffordCircuit::new(n_qubits);
     let mut rng = match seed {
         Some(s) => StdRng::seed_from_u64(s),
         None => StdRng::from_entropy(),
     };
 
     for _ in 0..gate_count {
-        let gate_type = rng.gen_range(0..6);
+        let gate_type = rng.gen_range(0..8);
         match gate_type {
             // 1-qubit gates
-            0..=3 => {
+            0..=5 => {
                 let q = rng.gen_range(0..n_qubits);
                 let gate = match gate_type {
-                    0 => QuantumGate::H(q),
-                    1 => QuantumGate::S(q),
-                    2 => QuantumGate::X(q),
-                    3 => QuantumGate::Z(q),
+                    0 => CliffordGate::H(q),
+                    1 => CliffordGate::S(q),
+                    2 => CliffordGate::X(q),
+                    3 => CliffordGate::Y(q),
+                    4 => CliffordGate::Z(q),
+                    5 => CliffordGate::Sdg(q),
                     _ => unreachable!(),
                 };
                 circuit.add_gate(gate);
             }
             // 2-qubit gates
-            4..=5 => {
+            6..=7 => {
                 if n_qubits < 2 {
                     continue;
                 }
@@ -119,8 +121,8 @@ pub fn random_circuit(n_qubits: usize, gate_count: usize, seed: Option<u64>) -> 
                     q2 = rng.gen_range(0..n_qubits);
                 }
                 let gate = match gate_type {
-                    4 => QuantumGate::CX(q1, q2),
-                    5 => QuantumGate::CZ(q1, q2),
+                    4 => CliffordGate::CX(q1, q2),
+                    5 => CliffordGate::CZ(q1, q2),
                     _ => unreachable!(),
                 };
                 circuit.add_gate(gate);
