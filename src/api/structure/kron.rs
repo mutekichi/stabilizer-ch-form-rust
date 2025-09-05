@@ -1,4 +1,3 @@
-// src/api/operations/kron.rs
 use crate::StabilizerCHForm;
 
 impl StabilizerCHForm {

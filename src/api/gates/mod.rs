@@ -2,7 +2,10 @@ pub mod cx;
 pub mod cz;
 pub mod h;
 pub mod s;
+pub mod sqrt_x;
+pub mod swap;
 pub mod x;
+pub mod y;
 pub mod z;
 
 pub use cx::CXGate;
@@ -11,6 +14,6 @@ pub use h::HGate;
 pub use s::SGate;
 pub use x::XGate;
 pub use z::ZGate;
-
-// TODO: SdgGate, YGate, SwapGate
-// DIDN'T DO: SqrtXGate, SqrtXdgGate, SqrtYGate, SqrtYdgGate
+pub use sqrt_x::SqrtXGate;
+pub use y::YGate;
+pub use swap::SwapGate;

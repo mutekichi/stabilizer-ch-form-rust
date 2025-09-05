@@ -4,3 +4,6 @@ pub mod h;
 pub mod s;
 pub mod x;
 pub mod z;
+pub mod y;
+pub mod sqrt_x;
+pub mod swap;
