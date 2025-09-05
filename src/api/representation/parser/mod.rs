@@ -1,9 +1,9 @@
-use crate::api::representation::{QuantumCircuit, QuantumGate};
+use crate::api::representation::{CliffordCircuit, CliffordGate};
 use regex::Regex;
 use std::fs;
 use std::path::Path;
 
-/// Parses an OpenQASM 2.0 string into a `QuantumCircuit`.
+/// Parses an OpenQASM 2.0 string into a `CliffordCircuit`.
 ///
 /// This is a simplified parser that supports `qreg` declarations and
 /// a subset of Clifford gates (h, s, x, z, cx, cz).
@@ -14,8 +14,8 @@ use std::path::Path;
 /// * `qasm_str` - A string slice containing the OpenQASM 2.0 circuit description.
 ///
 /// # Returns
-/// A `Result` containing the parsed `QuantumCircuit` or a `String` error message.
-pub fn from_qasm_str(qasm_str: &str) -> Result<QuantumCircuit, String> {
+/// A `Result` containing the parsed `CliffordCircuit` or a `String` error message.
+pub fn from_qasm_str(qasm_str: &str) -> Result<CliffordCircuit, String> {
     // Lazy static regex for better performance if called multiple times
     lazy_static::lazy_static! {
         static ref QREG_RE: Regex = Regex::new(r"qreg\s+([a-zA-Z][a-zA-Z0-9_]*)\s*\[\s*(\d+)\s*\]\s*;").unwrap();
@@ -67,8 +67,8 @@ pub fn from_qasm_str(qasm_str: &str) -> Result<QuantumCircuit, String> {
                 .map_err(|_| format!("Invalid target qubit index in line: {}", line))?;
 
             let gate = match gate_name {
-                "cx" => QuantumGate::CX(control, target),
-                "cz" => QuantumGate::CZ(control, target),
+                "cx" => CliffordGate::CX(control, target),
+                "cz" => CliffordGate::CZ(control, target),
                 _ => return Err(format!("Unsupported 2-qubit gate: {}", gate_name)),
             };
             gates.push(gate);
@@ -79,10 +79,10 @@ pub fn from_qasm_str(qasm_str: &str) -> Result<QuantumCircuit, String> {
                 .map_err(|_| format!("Invalid qubit index in line: {}", line))?;
 
             let gate = match gate_name {
-                "h" => QuantumGate::H(qarg),
-                "s" => QuantumGate::S(qarg),
-                "x" => QuantumGate::X(qarg),
-                "z" => QuantumGate::Z(qarg),
+                "h" => CliffordGate::H(qarg),
+                "s" => CliffordGate::S(qarg),
+                "x" => CliffordGate::X(qarg),
+                "z" => CliffordGate::Z(qarg),
                 _ => return Err(format!("Unsupported 1-qubit gate: {}", gate_name)),
             };
             gates.push(gate);
@@ -92,13 +92,13 @@ pub fn from_qasm_str(qasm_str: &str) -> Result<QuantumCircuit, String> {
     }
 
     if let Some(n) = n_qubits {
-        Ok(QuantumCircuit { n_qubits: n, gates })
+        Ok(CliffordCircuit { n_qubits: n, gates })
     } else {
         Err("qreg declaration not found in QASM string.".to_string())
     }
 }
 
-pub fn from_qasm_file<P: AsRef<Path>>(path: P) -> Result<QuantumCircuit, String> {
+pub fn from_qasm_file<P: AsRef<Path>>(path: P) -> Result<CliffordCircuit, String> {
     let qasm_content = fs::read_to_string(path.as_ref())
         .map_err(|e| format!("Failed to read file '{}': {}", path.as_ref().display(), e))?;
 

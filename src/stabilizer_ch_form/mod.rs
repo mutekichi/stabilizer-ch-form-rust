@@ -2,8 +2,7 @@ use ndarray::{Array1, Array2};
 use num_complex::Complex64;
 
 mod internal;
-use crate::api::QuantumCircuit;
-use crate::api::QuantumGate;
+use crate::api::representation::{CliffordCircuit, CliffordGate};
 use crate::api::gates::*;
 use internal::types::phase_factor::PhaseFactor;
 
